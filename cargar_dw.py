@@ -2,6 +2,8 @@
 from pathlib import Path
 from getpass import getpass
 import csv
+import os
+import sys
 import mysql.connector
 
 # Ubicación de los archivos CSV
@@ -27,20 +29,33 @@ BOOLEANOS = {
     "FACT_RESERVA": {"is_cancelada"}
 }
 
-# Conexión a MySQL
-contrasena = getpass("Contraseña de MySQL: ")
+# En una ejecución automática, el lanzador coloca la contraseña descifrada
+# solamente en el entorno de este proceso. En una ejecución manual se pide
+# de forma interactiva, como antes.
+contrasena = os.environ.get("STAYCHAIN_MYSQL_PASSWORD")
+if contrasena is None:
+    if not sys.stdin.isatty():
+        print(
+            "Error: no hay una contraseña MySQL disponible y la ejecución "
+            "no es interactiva.",
+            file=sys.stderr,
+        )
+        sys.exit(2)
+    contrasena = getpass("Contraseña de MySQL: ")
 
-conexion = mysql.connector.connect(
-    host="localhost",
-    port=3306,
-    user="root",
-    password=contrasena,
-    database="staychain"
-)
-
-cursor = conexion.cursor()
+conexion = None
+cursor = None
 
 try:
+    conexion = mysql.connector.connect(
+        host=os.environ.get("STAYCHAIN_MYSQL_HOST", "localhost"),
+        port=int(os.environ.get("STAYCHAIN_MYSQL_PORT", "3306")),
+        user=os.environ.get("STAYCHAIN_MYSQL_USER", "root"),
+        password=contrasena,
+        database=os.environ.get("STAYCHAIN_MYSQL_DATABASE", "staychain"),
+    )
+    cursor = conexion.cursor()
+
     for tabla in TABLAS:
 
         archivo = CARPETA_CSV / f"{tabla}.csv"
@@ -109,11 +124,15 @@ try:
     print("\nCarga finalizada correctamente.")
 
 except Exception as error:
-    conexion.rollback()
+    if conexion is not None and conexion.is_connected():
+        conexion.rollback()
     print(f"\nError durante la carga: {error}")
     print("Se cancelaron las inserciones de esta ejecución.")
+    sys.exit(1)
 
 finally:
-    cursor.close()
-    conexion.close()
+    if cursor is not None:
+        cursor.close()
+    if conexion is not None and conexion.is_connected():
+        conexion.close()
 
