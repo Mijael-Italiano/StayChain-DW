@@ -1,0 +1,5 @@
+id_canal,nombre_canal,tipo_canal
+1,Web propia,Directo
+2,Booking.com,OTA
+3,Expedia,OTA
+4,Call Center,Call Center

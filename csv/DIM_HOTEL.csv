@@ -1,0 +1,13 @@
+id_hotel,nombre,tipo,provincia,capacidad_hab
+1,StayChain Buenos Aires Centro,Ciudad,Ciudad Autónoma de Buenos Aires,48
+2,StayChain Córdoba Centro,Ciudad,Córdoba,42
+3,StayChain Rosario Centro,Ciudad,Santa Fe,38
+4,StayChain Mendoza Centro,Ciudad,Mendoza,40
+5,StayChain Salta Centro,Ciudad,Salta,32
+6,StayChain Neuquén Centro,Ciudad,Neuquén,30
+7,StayChain Tucumán Centro,Ciudad,Tucumán,30
+8,StayChain La Plata Centro,Ciudad,Buenos Aires,28
+9,StayChain Bariloche Resort,Resort,Río Negro,48
+10,StayChain Iguazú Resort,Resort,Misiones,44
+11,StayChain Mar del Plata Resort,Resort,Buenos Aires,46
+12,StayChain Villa Carlos Paz Resort,Resort,Córdoba,40

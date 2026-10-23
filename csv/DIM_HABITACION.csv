@@ -1,0 +1,6 @@
+id_habitacion,tipo_habitacion,capacidad,precio_rack
+1,Simple,1,75.00
+2,Doble,2,110.00
+3,Superior,3,150.00
+4,Suite,4,230.00
+5,Familiar,5,185.00
